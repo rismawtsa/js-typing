@@ -1,4 +1,4 @@
-const QUOTE_API_URL = "http://api.quotable.io/";
+const QUOTE_API_URL = "https://api.quotable.io/";
 const getQuoteApiUrl = (param) => QUOTE_API_URL + param;
 
 const quoteDisplayElement = document.querySelector(".quote-display");
