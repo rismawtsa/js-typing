@@ -5,6 +5,7 @@ const quoteDisplayElement = document.querySelector(".quote-display");
 const quoteInputElement = document.querySelector(".quote-input");
 const reportLinkElement = document.querySelector(".report-link");
 const reportContainerElement = document.querySelector(".report-container");
+const reloadButtonElement = document.querySelector(".reload");
 
 let quote = "";
 let intervalId;
@@ -98,7 +99,7 @@ reportLinkElement.addEventListener("click", () => {
       divElement.append(labelElement);
 
       const timeElement = document.createElement("span");
-      timeElement.innerText = `Time: ${item.time}`;
+      timeElement.innerText = `Time: ${item.time}s`;
       divElement.append(timeElement);
       total["time"] = total["time"] + item.time;
 
@@ -112,7 +113,7 @@ reportLinkElement.addEventListener("click", () => {
 
     const totalTimeElement = document.createElement("span");
     totalTimeElement.classList.add("time");
-    totalTimeElement.innerText = `Time: ${total.time}`;
+    totalTimeElement.innerText = `Time: ${total.time}s`;
     reportContainerElement.append(totalTimeElement);
 
     const totalErrorElement = document.createElement("span");
@@ -143,5 +144,10 @@ const getQuote = async () => {
   await getRandomQuote();
   generateQuote();
 };
+
+reloadButtonElement.addEventListener("click", () => {
+  quoteDisplayElement.innerHTML = "";
+  getQuote();
+});
 
 getQuote();

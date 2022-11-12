@@ -26,10 +26,8 @@ img {
 .container {
   width: 75%;
   margin: 3rem auto 0;
-}
-
-.container div:last-child {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
 }
 
 .quote-display {
@@ -58,12 +56,28 @@ img {
   text-decoration: underline;
 }
 
+.container div:last-of-type {
+  text-align: right;
+}
+
 .report-link {
   text-decoration: none;
   font-size: 15px;
-  /* text-align: right; */
-  /* display: block; */
   color: #636361;
+}
+
+.reload {
+  border: none;
+  background: none;
+  padding: 0;
+  width: 1.5rem;
+  margin: auto;
+  cursor: pointer;
+}
+
+.reload:hover,
+.report-link:hover {
+  opacity: 0.7;
 }
 
 .report-container {
