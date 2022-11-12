@@ -147,6 +147,8 @@ const getQuote = async () => {
 
 reloadButtonElement.addEventListener("click", () => {
   quoteDisplayElement.innerHTML = "";
+  quoteInputElement.value = null;
+  reportContainerElement.style.display = "none";
   getQuote();
 });
 
