@@ -151,9 +151,12 @@ const getQuote = async () => {
 };
 
 reloadButtonElement.addEventListener("click", () => {
+  if (intervalId) clearInterval(intervalId);
+
   quoteDisplayElement.innerHTML = "";
   quoteInputElement.value = null;
   reportContainerElement.style.display = "none";
+
   getQuote();
 });
 
