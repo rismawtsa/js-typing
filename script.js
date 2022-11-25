@@ -76,10 +76,15 @@ quoteInputElement.addEventListener("input", (event) => {
   });
 
   if (correct) {
-    report.push({ error: totalError, time: timer });
-    generateQuote();
+    if (report.length >= 10) report.shift();
+    report.push({
+      error: totalError,
+      time: timer,
+      dateTime: new Date(),
+    });
     totalError = 0;
     clearInterval(intervalId);
+    generateQuote();
   }
 });
 
@@ -90,44 +95,44 @@ reportLinkElement.addEventListener("click", () => {
     reportContainerElement.style.display = "block";
     reportContainerElement.innerHTML = "";
 
-    const total = { time: 0, error: 0 };
-    const detailReportContainerElement = document.createElement("div");
-    report.forEach((item, idx) => {
-      const divElement = document.createElement("div");
-      const labelElement = document.createElement("label");
-      labelElement.innerText = `${idx + 1}.`;
-      divElement.append(labelElement);
+    const reportElement = document.createElement("div");
 
-      const timeElement = document.createElement("span");
-      timeElement.innerText = `Time: ${item.time}s`;
-      divElement.append(timeElement);
-      total["time"] = total["time"] + item.time;
+    if (report.length <= 0) {
+      const noDataElement = document.createElement("div");
+      noDataElement.classList.add("no-data");
+      noDataElement.innerHTML =
+        "<span>-- No Data --</span> <br /> <em>Typing first! Complete at least one quotes.</em>";
+      reportElement.append(noDataElement);
+    } else {
+      const detailReportContainerElement = document.createElement("div");
 
-      const errorElement = document.createElement("span");
-      errorElement.innerText = `Error: ${item.error}`;
-      divElement.append(errorElement);
-      total["error"] = total["error"] + item.error;
+      report.sort((a, b) => b.dateTime - a.dateTime);
+      report.forEach((item, idx) => {
+        const divElement = document.createElement("div");
+        const labelElement = document.createElement("label");
+        labelElement.innerText = `${idx + 1}.`;
+        divElement.append(labelElement);
 
-      detailReportContainerElement.append(divElement);
-    });
+        const timeElement = document.createElement("span");
+        timeElement.innerText = `Time: ${item.time}s`;
+        divElement.append(timeElement);
 
-    const totalTimeElement = document.createElement("span");
-    totalTimeElement.classList.add("time");
-    totalTimeElement.innerText = `Time: ${total.time}s`;
-    reportContainerElement.append(totalTimeElement);
+        const errorElement = document.createElement("span");
+        errorElement.innerText = `Error: ${item.error}`;
+        divElement.append(errorElement);
 
-    const totalErrorElement = document.createElement("span");
-    totalErrorElement.classList.add("error");
-    totalErrorElement.innerText = `Error: ${total.error}`;
-    reportContainerElement.append(totalErrorElement);
+        detailReportContainerElement.append(divElement);
+      });
 
-    if (report.length > 0) {
-      const detailHeaderElement = document.createElement("h4");
-      detailHeaderElement.classList.add("detail-header");
-      detailHeaderElement.innerText = "Detail";
-      reportContainerElement.append(detailHeaderElement);
+      reportElement.append(detailReportContainerElement);
+      const noteElement = document.createElement("em");
+      noteElement.classList.add("note");
+      noteElement.innerText =
+        "* Only the last 10 records are listed. Sorted from the latest.";
+      reportElement.append(noteElement);
     }
-    reportContainerElement.append(detailReportContainerElement);
+
+    reportContainerElement.append(reportElement);
   }
 });
 

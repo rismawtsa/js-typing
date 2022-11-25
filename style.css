@@ -37,6 +37,10 @@ img {
   font-size: 25px;
 }
 
+.quote-display span {
+  margin-right: 1px;
+}
+
 .quote-input {
   font-size: 25px;
   width: 100%;
@@ -45,6 +49,7 @@ img {
   padding: 0.5rem;
   min-height: 10rem;
   resize: none;
+  letter-spacing: 1px;
 }
 
 .correct {
@@ -82,17 +87,33 @@ img {
 
 .report-container {
   display: none;
-  width: 70%;
-  margin: auto;
+  width: 75%;
+  margin: 0.2rem auto;
 }
-.report-container label,
+.report-container label {
+  display: inline-block;
+  width: 1.8rem;
+  color: #686666;
+}
 .report-container span {
   margin-right: 1rem;
+  color: #686666;
 }
 
-.detail-header {
-  margin-bottom: 0;
-  margin-top: 0;
+.no-data span {
+  font-weight: bold;
+  color: #686666;
+}
+.no-data em {
+  color: grey;
+  font-size: 13px;
+}
+
+.note {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: grey;
+  font-size: 13px;
 }
 
 .skeleton {
