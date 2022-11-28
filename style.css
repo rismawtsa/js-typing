@@ -1,12 +1,23 @@
-* {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.5;
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&@800display=swap");
+:root {
+  --cursor-text: #ff9d00;
+  --text-correct: #0c7c59;
+  --text-incorrect: #d64933;
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  font-family: "Inconsolata", monospace;
   box-sizing: border-box;
 }
 
 body {
   padding: 0.5rem 2rem;
 }
+
 img {
   width: 100%;
 }
@@ -16,6 +27,7 @@ img {
   display: flex;
   justify-content: flex-end;
 }
+
 .nav a {
   text-decoration: none;
   width: 1.5rem;
@@ -28,47 +40,68 @@ img {
   margin: 3rem auto 0;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .quote-display {
   margin-bottom: 1rem;
   margin-right: calc(0.5rem + 1px);
   margin-left: calc(0.5rem + 1px);
-  font-size: 25px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.quote-display span {
-  margin-right: 1px;
+.quote-display.filter {
+  filter: blur(4px);
+}
+
+.quote-display .char {
+  word-spacing: -5px;
+  font-size: 30px;
+  white-space: pre-wrap;
+  user-select: none;
+  line-height: 1.5;
+  position: relative;
+}
+.current::before {
+  content: "";
+  height: 32px;
+  border-left: 2px solid var(--cursor-text);
+  position: absolute;
+  top: 0;
+  bottom: 0;
 }
 
 .quote-input {
-  font-size: 25px;
-  width: 100%;
-  border: 1px solid #bebdb7;
-  border-radius: 5px;
-  padding: 0.5rem;
-  min-height: 10rem;
-  resize: none;
-  letter-spacing: 1px;
+  width: 1px;
+  bottom: 0;
+  right: 0;
+  cursor: default;
+  background: none;
+  border: none;
+  position: absolute;
+  color: rgba(241, 236, 206, 0%);
+  outline: none;
 }
 
 .correct {
-  color: green;
+  color: var(--text-correct);
 }
 
 .incorrect {
-  color: red;
+  color: var(--text-incorrect);
   text-decoration: underline;
 }
 
-.container div:last-of-type {
-  text-align: right;
-}
-
-.report-link {
-  text-decoration: none;
-  font-size: 15px;
-  color: #636361;
+.info {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  z-index: 10;
 }
 
 .reload {
@@ -76,44 +109,12 @@ img {
   background: none;
   padding: 0;
   width: 1.5rem;
-  margin: auto;
+  margin: 2rem auto 0;
   cursor: pointer;
 }
 
-.reload:hover,
-.report-link:hover {
+.reload:hover {
   opacity: 0.7;
-}
-
-.report-container {
-  display: none;
-  width: 75%;
-  margin: 0.2rem auto;
-}
-.report-container label {
-  display: inline-block;
-  width: 1.8rem;
-  color: #686666;
-}
-.report-container span {
-  margin-right: 1rem;
-  color: #686666;
-}
-
-.no-data span {
-  font-weight: bold;
-  color: #686666;
-}
-.no-data em {
-  color: grey;
-  font-size: 13px;
-}
-
-.note {
-  display: inline-block;
-  margin-top: 0.5rem;
-  color: grey;
-  font-size: 13px;
 }
 
 .skeleton {

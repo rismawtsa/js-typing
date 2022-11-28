@@ -1,60 +1,95 @@
-const QUOTE_API_URL = "https://api.quotable.io/";
-const getQuoteApiUrl = (param) => QUOTE_API_URL + param;
+const QUOTE_API_URL = "https://api.quotable.io/random";
+const QUOTES_JSON = "./quotes.json";
 
+const containerElement = document.querySelector(".container");
 const quoteDisplayElement = document.querySelector(".quote-display");
 const quoteInputElement = document.querySelector(".quote-input");
-const reportLinkElement = document.querySelector(".report-link");
-const reportContainerElement = document.querySelector(".report-container");
 const reloadButtonElement = document.querySelector(".reload");
 
 let quote = "";
-let intervalId;
-let timer = 0;
-let totalError = 0;
-let report = [];
+let defaultQuoteIndex = 0;
 
-const startTimer = () => {
-  timer = 0;
-  const startTime = new Date();
-  intervalId = setInterval(() => {
-    timer = Math.floor((new Date() - startTime) / 1000);
-  }, 1000);
+const getQuoteJson = async () => {
+  const response = await fetch(QUOTES_JSON);
+  const data = await response.json();
+  const { content, author } = data.quotes[defaultQuoteIndex];
+
+  quote = `${content} ${author}`;
+
+  if (defaultQuoteIndex < data.quotes.length) defaultQuoteIndex++;
+  else defaultQuoteIndex = 0;
 };
 
 const getRandomQuote = async () => {
   try {
-    const response = await fetch(getQuoteApiUrl("random"));
+    const response = await fetch(QUOTE_API_URL);
     const { content, author } = await response.json();
 
     quote = `${content} ${author}`;
   } catch (error) {
-    console.log("getRandomQuote", { error: error.message });
+    return getQuoteJson();
   }
 };
 
 const generateQuote = () => {
   quoteDisplayElement.innerHTML = "";
   quoteInputElement.value = null;
-  quote.split("").forEach((character) => {
-    const characterSpan = document.createElement("span");
-    characterSpan.classList.add("char");
-    characterSpan.innerText = character;
-    quoteDisplayElement.appendChild(characterSpan);
+
+  const quotes = quote.split(" ");
+  quotes.forEach((word, indexWord) => {
+    const wordDiv = document.createElement("div");
+
+    word.split("").forEach((character, indexChar) => {
+      const characterSpan = document.createElement("span");
+      characterSpan.classList.add("char");
+      if (indexWord === 0 && indexChar === 0)
+        characterSpan.classList.add("current");
+      characterSpan.innerText = character;
+      wordDiv.appendChild(characterSpan);
+    });
+
+    if (indexWord < quotes.length - 1) {
+      const spaceSpan = document.createElement("span");
+      spaceSpan.classList.add("char");
+      spaceSpan.innerText = " ";
+      wordDiv.appendChild(spaceSpan);
+    }
+
+    quoteDisplayElement.appendChild(wordDiv);
   });
 };
 
-quoteInputElement.addEventListener("keydown", () => {
-  reportContainerElement.style.display = "none";
+document.addEventListener("click", (event) => {
+  const infoDiv = document.querySelector(".info");
+  if (
+    quoteDisplayElement.contains(event.target) ||
+    (infoDiv && infoDiv.contains(event.target))
+  ) {
+    infoDiv && infoDiv.remove();
+    quoteDisplayElement.classList.remove("filter");
+    quoteInputElement.focus();
+  }
+});
+
+quoteInputElement.addEventListener("blur", function (e) {
+  if (!reloadButtonElement.contains(event.target)) {
+    quoteDisplayElement.classList.add("filter");
+    const infoDiv = document.querySelector(".info");
+
+    if (!infoDiv) {
+      const newInfoDiv = document.createElement("div");
+      newInfoDiv.classList.add("info");
+      newInfoDiv.innerText = "Click to active....";
+      containerElement.insertBefore(newInfoDiv, reloadButtonElement);
+    }
+  }
 });
 
 quoteInputElement.addEventListener("input", (event) => {
   const arrayQuote = document.querySelectorAll(".char");
   const arrayValue = event.target.value;
 
-  if (arrayValue.length === 1) {
-    startTimer();
-    getRandomQuote();
-  }
+  if (arrayValue.length === 1) getRandomQuote();
 
   let correct = true;
   arrayQuote.forEach((characterSpan, index) => {
@@ -71,69 +106,30 @@ quoteInputElement.addEventListener("input", (event) => {
       characterSpan.classList.remove("correct");
       characterSpan.classList.add("incorrect");
       correct = false;
-      totalError++;
     }
   });
 
+  const currentSpan = document.querySelector(".current");
+  currentSpan && currentSpan.classList.remove("current");
+  if (arrayValue.length < arrayQuote.length) {
+    arrayQuote[arrayValue.length].classList.add("current");
+  }
+
   if (correct) {
-    if (report.length >= 10) report.shift();
-    report.push({
-      error: totalError,
-      time: timer,
-      dateTime: new Date(),
-    });
-    totalError = 0;
-    clearInterval(intervalId);
     generateQuote();
   }
 });
 
-reportLinkElement.addEventListener("click", () => {
-  if (reportContainerElement.style.display === "block") {
-    reportContainerElement.style.display = "none";
-  } else {
-    reportContainerElement.style.display = "block";
-    reportContainerElement.innerHTML = "";
+reloadButtonElement.addEventListener("click", () => {
+  const infoDiv = document.querySelector(".info");
+  infoDiv && infoDiv.remove();
+  quoteDisplayElement.classList.remove("filter");
+  quoteInputElement.focus();
 
-    const reportElement = document.createElement("div");
+  quoteDisplayElement.innerHTML = "";
+  quoteInputElement.value = null;
 
-    if (report.length <= 0) {
-      const noDataElement = document.createElement("div");
-      noDataElement.classList.add("no-data");
-      noDataElement.innerHTML =
-        "<span>-- No Data --</span> <br /> <em>Typing first! Complete at least one quotes.</em>";
-      reportElement.append(noDataElement);
-    } else {
-      const detailReportContainerElement = document.createElement("div");
-
-      report.sort((a, b) => b.dateTime - a.dateTime);
-      report.forEach((item, idx) => {
-        const divElement = document.createElement("div");
-        const labelElement = document.createElement("label");
-        labelElement.innerText = `${idx + 1}.`;
-        divElement.append(labelElement);
-
-        const timeElement = document.createElement("span");
-        timeElement.innerText = `Time: ${item.time}s`;
-        divElement.append(timeElement);
-
-        const errorElement = document.createElement("span");
-        errorElement.innerText = `Error: ${item.error}`;
-        divElement.append(errorElement);
-
-        detailReportContainerElement.append(divElement);
-      });
-
-      reportElement.append(detailReportContainerElement);
-      const noteElement = document.createElement("em");
-      noteElement.classList.add("note");
-      noteElement.innerText =
-        "* Only the last 10 records are listed. Sorted from the latest.";
-      reportElement.append(noteElement);
-    }
-
-    reportContainerElement.append(reportElement);
-  }
+  getQuote();
 });
 
 const generateSkeleton = () => {
@@ -149,15 +145,5 @@ const getQuote = async () => {
   await getRandomQuote();
   generateQuote();
 };
-
-reloadButtonElement.addEventListener("click", () => {
-  if (intervalId) clearInterval(intervalId);
-
-  quoteDisplayElement.innerHTML = "";
-  quoteInputElement.value = null;
-  reportContainerElement.style.display = "none";
-
-  getQuote();
-});
 
 getQuote();
