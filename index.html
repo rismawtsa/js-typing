@@ -7,24 +7,69 @@
     <meta name="description" content="Typing practice" />
     <link rel="icon" href="./images/favicon.ico" />
     <title>Typing</title>
-    <script src="script.js" type="module" defer></script>
+    <script src="script.js" type="module"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="nav">
+      <div class="setting">
+        <div class="setting-item">
+          <label>Dark Mode</label>
+          <label class="switch switch-mode">
+            <input type="checkbox" name="checkbox-mode" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label>Autonext</label>
+          <label class="switch swith-autonext">
+            <input type="checkbox" name="checkbox-autonext" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <button class="btn btn-setting">
+        <img
+          class="icon"
+          src="./images/icons8-settings.svg"
+          alt="setting"
+          title="setting"
+        />
+      </button>
       <a
         href="https://github.com/rismawtsa/js-typing"
         target="_blank"
         rel="noopener noreferrer"
-        ><img src="./images/github-60.png" alt="github"
-      /></a>
+      >
+        <img
+          class="icon"
+          src="./images/icons8-github.svg"
+          alt="github"
+          title="github"
+        />
+      </a>
     </div>
     <section class="container">
       <input class="quote-input" autofocus />
       <div class="quote-display"></div>
-      <button class="reload">
-        <img src="./images/update-left-rotation.png" alt="reload" />
-      </button>
+      <div class="control">
+        <button class="btn btn-copy">
+          <img
+            class="icon"
+            src="./images/copy-icon.svg"
+            alt="copy"
+            title="copy"
+          />
+        </button>
+        <button class="btn btn-reload">
+          <img
+            class="icon"
+            src="./images/icons8-refresh.svg"
+            alt="reload"
+            title="reload"
+          />
+        </button>
+      </div>
     </section>
     <section class="report-container"></section>
   </body>

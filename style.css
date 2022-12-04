@@ -1,8 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&@800display=swap");
 :root {
-  --cursor-text: #ff9d00;
+  --background-color: #ffffff;
+  --caret-color: #ff9d00;
+  --text-primary: black;
   --text-correct: #0c7c59;
   --text-incorrect: #d64933;
+  --icon-filter: invert(0.1);
+}
+
+.dark-mode {
+  --background-color: #323437;
+  --text-primary: #94938f;
+  --text-correct: #dddddb;
+  --icon-filter: invert(0.5);
 }
 
 *,
@@ -15,38 +25,75 @@
 }
 
 body {
-  padding: 0.5rem 2rem;
-}
-
-img {
-  width: 100%;
+  width: 75%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: var(--background-color);
+  color: var(--text-primary);
 }
 
 .nav {
-  text-align: right;
+  margin-top: 3rem;
   display: flex;
   justify-content: flex-end;
+  position: relative;
 }
 
 .nav a {
   text-decoration: none;
   width: 1.5rem;
-  height: 1.5rem;
   display: block;
 }
 
+.setting {
+  display: none;
+  background-color: var(--background-color);
+  position: absolute;
+  border: 1px solid var(--text-primary);
+  top: 2.2rem;
+  width: 12rem;
+  right: -3.8rem;
+  padding: 1rem;
+  border-radius: 5px;
+  animation: fade-in 0.6s;
+  color: var(--text-primary);
+  text-align: left;
+  z-index: 10;
+}
+
+.setting::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -0.8rem;
+  border: 10px solid transparent;
+  border-bottom: 10px solid var(--text-primary);
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+.setting-item:first-child {
+  padding-top: 0;
+  border-bottom: 1px solid var(--text-primary);
+}
+
+.setting-item:last-child {
+  padding-bottom: 0;
+}
+
 .container {
-  width: 75%;
-  margin: 3rem auto 0;
+  margin-top: 3.5rem;
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
 .quote-display {
-  margin-bottom: 1rem;
-  margin-right: calc(0.5rem + 1px);
-  margin-left: calc(0.5rem + 1px);
   display: flex;
   flex-wrap: wrap;
 }
@@ -66,7 +113,7 @@ img {
 .current::before {
   content: "";
   height: 32px;
-  border-left: 2px solid var(--cursor-text);
+  border-left: 2px solid var(--caret-color);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -74,8 +121,6 @@ img {
 
 .quote-input {
   width: 1px;
-  bottom: 0;
-  right: 0;
   cursor: default;
   background: none;
   border: none;
@@ -104,17 +149,40 @@ img {
   z-index: 10;
 }
 
-.reload {
+.control {
+  display: flex;
+  justify-content: center;
+  margin-top: 3.5rem;
+}
+
+.btn {
   border: none;
   background: none;
   padding: 0;
   width: 1.5rem;
-  margin: 2rem auto 0;
   cursor: pointer;
 }
 
-.reload:hover {
-  opacity: 0.7;
+.btn-copy {
+  margin-right: 1rem;
+}
+.btn-setting {
+  margin-right: 0.1rem;
+}
+
+.btn-next {
+  margin-left: 1rem;
+  position: relative;
+  top: 3px;
+}
+
+.icon {
+  filter: var(--icon-filter);
+  width: 100%;
+}
+
+.icon:hover {
+  opacity: 0.6;
 }
 
 .skeleton {
@@ -129,11 +197,81 @@ img {
   width: 50%;
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-color);
+  border: 2px solid #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 2px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  border-color: #0c7c59;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #0c7c59;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(22px);
+  -ms-transform: translateX(22px);
+  transform: translateX(22px);
+  background-color: #0c7c59;
+}
+
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 @keyframes skeleton-loading {
   0% {
     background-color: hsl(200, 20%, 70%);
   }
   100% {
     background-color: hsl(200, 20%, 95%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

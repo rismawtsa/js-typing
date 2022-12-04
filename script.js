@@ -1,20 +1,58 @@
 const QUOTE_API_URL = "https://api.quotable.io/random";
 const QUOTES_JSON = "./quotes.json";
 
+const bodyElement = document.querySelector("body");
+const settingButtonElement = document.querySelector(".btn-setting");
+const settingElement = document.querySelector(".setting");
+const modeSwitchElement = document.getElementsByName("checkbox-mode")[0];
+const autonextSwitchElement =
+  document.getElementsByName("checkbox-autonext")[0];
 const containerElement = document.querySelector(".container");
 const quoteDisplayElement = document.querySelector(".quote-display");
 const quoteInputElement = document.querySelector(".quote-input");
-const reloadButtonElement = document.querySelector(".reload");
+const controlElement = document.querySelector(".control");
+const reloadButtonElement = document.querySelector(".btn-reload");
+const copyButtonElement = document.querySelector(".btn-copy");
 
-let quote = "";
+let infoDiv;
+
+let currentQuote = "";
+let nextQuote = "";
 let defaultQuoteIndex = 0;
+
+const mode = localStorage.getItem("mode");
+if (mode) {
+  bodyElement.classList.add("dark-mode");
+  modeSwitchElement.checked = true;
+}
+
+const getAutonextFlag = () => {
+  const autonextLs = localStorage.getItem("autonext");
+  if (autonextLs === "false") return false;
+
+  return true;
+};
+
+if (getAutonextFlag()) {
+  autonextSwitchElement.checked = true;
+} else {
+  autonextSwitchElement.checked = false;
+}
+
+const generateSkeleton = () => {
+  for (let index = 0; index < 2; index++) {
+    const skeletonElement = document.createElement("div");
+    skeletonElement.classList.add("skeleton");
+    quoteDisplayElement.append(skeletonElement);
+  }
+};
 
 const getQuoteJson = async () => {
   const response = await fetch(QUOTES_JSON);
   const data = await response.json();
   const { content, author } = data.quotes[defaultQuoteIndex];
 
-  quote = `${content} ${author}`;
+  nextQuote = `${content} ${author}`;
 
   if (defaultQuoteIndex < data.quotes.length) defaultQuoteIndex++;
   else defaultQuoteIndex = 0;
@@ -25,7 +63,7 @@ const getRandomQuote = async () => {
     const response = await fetch(QUOTE_API_URL);
     const { content, author } = await response.json();
 
-    quote = `${content} ${author}`;
+    nextQuote = `${content} ${author}`;
   } catch (error) {
     return getQuoteJson();
   }
@@ -33,9 +71,9 @@ const getRandomQuote = async () => {
 
 const generateQuote = () => {
   quoteDisplayElement.innerHTML = "";
-  quoteInputElement.value = null;
+  quoteInputElement.value = "";
 
-  const quotes = quote.split(" ");
+  const quotes = nextQuote.split(" ");
   quotes.forEach((word, indexWord) => {
     const wordDiv = document.createElement("div");
 
@@ -59,29 +97,63 @@ const generateQuote = () => {
   });
 };
 
+const enableInput = () => {
+  infoDiv && infoDiv.remove();
+  infoDiv = undefined;
+  quoteDisplayElement.classList.remove("filter");
+  quoteInputElement.focus();
+};
+
+settingButtonElement.addEventListener("click", () => {
+  if (settingElement.style.display === "block") {
+    settingElement.style.display = "none";
+  } else {
+    settingElement.style.display = "block";
+  }
+});
+
+modeSwitchElement.addEventListener("click", () => {
+  if (bodyElement.classList.contains("dark-mode")) {
+    bodyElement.classList.remove("dark-mode");
+    localStorage.setItem("mode", "");
+  } else {
+    bodyElement.classList.add("dark-mode");
+    localStorage.setItem("mode", "dark");
+  }
+});
+
+autonextSwitchElement.addEventListener("click", () => {
+  if (autonextSwitchElement.checked) {
+    localStorage.setItem("autonext", true);
+  } else {
+    localStorage.setItem("autonext", false);
+  }
+});
+
 document.addEventListener("click", (event) => {
-  const infoDiv = document.querySelector(".info");
   if (
     quoteDisplayElement.contains(event.target) ||
     (infoDiv && infoDiv.contains(event.target))
   ) {
-    infoDiv && infoDiv.remove();
-    quoteDisplayElement.classList.remove("filter");
-    quoteInputElement.focus();
+    enableInput();
+  }
+
+  if (
+    !settingElement.contains(event.target) &&
+    !settingButtonElement.contains(event.target)
+  ) {
+    settingElement.style.display = "none";
   }
 });
 
-quoteInputElement.addEventListener("blur", function (e) {
-  if (!reloadButtonElement.contains(event.target)) {
-    quoteDisplayElement.classList.add("filter");
-    const infoDiv = document.querySelector(".info");
+quoteInputElement.addEventListener("blur", function (event) {
+  quoteDisplayElement.classList.add("filter");
 
-    if (!infoDiv) {
-      const newInfoDiv = document.createElement("div");
-      newInfoDiv.classList.add("info");
-      newInfoDiv.innerText = "Click to active....";
-      containerElement.insertBefore(newInfoDiv, reloadButtonElement);
-    }
+  if (!infoDiv) {
+    infoDiv = document.createElement("div");
+    infoDiv.classList.add("info");
+    infoDiv.innerText = "Click to active....";
+    containerElement.insertBefore(infoDiv, controlElement);
   }
 });
 
@@ -89,7 +161,10 @@ quoteInputElement.addEventListener("input", (event) => {
   const arrayQuote = document.querySelectorAll(".char");
   const arrayValue = event.target.value;
 
-  if (arrayValue.length === 1) getRandomQuote();
+  if (arrayValue.length === 1) {
+    currentQuote = nextQuote;
+    getRandomQuote();
+  }
 
   let correct = true;
   arrayQuote.forEach((characterSpan, index) => {
@@ -115,30 +190,49 @@ quoteInputElement.addEventListener("input", (event) => {
     arrayQuote[arrayValue.length].classList.add("current");
   }
 
-  if (correct) {
+  function getNextQuote() {
+    currentQuote = "";
     generateQuote();
   }
+
+  if (correct) {
+    if (autonextSwitchElement.checked) {
+      getNextQuote();
+    } else {
+      const arrowIcon = document.createElement("button");
+      arrowIcon.classList.add("btn", "btn-next");
+      arrowIcon.innerHTML =
+        '<img class="icon" src="./images/right-arrow.svg" alt="next" title="next or press enter/return"/>';
+      arrowIcon.title = "next quote";
+      arrowIcon.addEventListener("click", () => {
+        getNextQuote();
+        enableInput();
+      });
+      quoteDisplayElement.appendChild(arrowIcon);
+    }
+  }
+
+  quoteInputElement.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && correct) {
+      getNextQuote();
+      enableInput();
+    }
+  });
+});
+
+copyButtonElement.addEventListener("click", () => {
+  enableInput();
+  const quote = currentQuote || nextQuote;
+  navigator.clipboard.writeText(quote);
 });
 
 reloadButtonElement.addEventListener("click", () => {
-  const infoDiv = document.querySelector(".info");
-  infoDiv && infoDiv.remove();
-  quoteDisplayElement.classList.remove("filter");
-  quoteInputElement.focus();
-
   quoteDisplayElement.innerHTML = "";
-  quoteInputElement.value = null;
+  quoteInputElement.value = "";
+  enableInput();
 
   getQuote();
 });
-
-const generateSkeleton = () => {
-  for (let index = 0; index < 2; index++) {
-    const skeletonElement = document.createElement("div");
-    skeletonElement.classList.add("skeleton");
-    quoteDisplayElement.append(skeletonElement);
-  }
-};
 
 const getQuote = async () => {
   generateSkeleton();
