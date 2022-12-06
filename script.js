@@ -193,6 +193,7 @@ quoteInputElement.addEventListener("input", (event) => {
   function getNextQuote() {
     currentQuote = "";
     generateQuote();
+    enableInput();
   }
 
   if (correct) {
@@ -202,22 +203,12 @@ quoteInputElement.addEventListener("input", (event) => {
       const arrowIcon = document.createElement("button");
       arrowIcon.classList.add("btn", "btn-next");
       arrowIcon.innerHTML =
-        '<img class="icon" src="./images/right-arrow.svg" alt="next" title="next or press enter/return"/>';
+        '<img class="icon" src="./images/right-arrow.svg" alt="next" title="get next quote"/>';
       arrowIcon.title = "next quote";
-      arrowIcon.addEventListener("click", () => {
-        getNextQuote();
-        enableInput();
-      });
+      arrowIcon.addEventListener("click", getNextQuote);
       quoteDisplayElement.appendChild(arrowIcon);
     }
   }
-
-  quoteInputElement.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && correct) {
-      getNextQuote();
-      enableInput();
-    }
-  });
 });
 
 copyButtonElement.addEventListener("click", () => {

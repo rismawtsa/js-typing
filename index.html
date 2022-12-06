@@ -11,7 +11,29 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="nav">
+    <section class="container">
+      <input class="quote-input" autofocus />
+      <div class="quote-display"></div>
+      <div class="control">
+        <button class="btn btn-copy">
+          <img
+            class="icon"
+            src="./images/copy-icon.svg"
+            alt="copy"
+            title="copy"
+          />
+        </button>
+        <button class="btn btn-reload">
+          <img
+            class="icon"
+            src="./images/icons8-refresh.svg"
+            alt="reload"
+            title="reload"
+          />
+        </button>
+      </div>
+    </section>
+    <div class="navbar">
       <div class="setting">
         <div class="setting-item">
           <label>Dark Mode</label>
@@ -49,28 +71,5 @@
         />
       </a>
     </div>
-    <section class="container">
-      <input class="quote-input" autofocus />
-      <div class="quote-display"></div>
-      <div class="control">
-        <button class="btn btn-copy">
-          <img
-            class="icon"
-            src="./images/copy-icon.svg"
-            alt="copy"
-            title="copy"
-          />
-        </button>
-        <button class="btn btn-reload">
-          <img
-            class="icon"
-            src="./images/icons8-refresh.svg"
-            alt="reload"
-            title="reload"
-          />
-        </button>
-      </div>
-    </section>
-    <section class="report-container"></section>
   </body>
 </html>
