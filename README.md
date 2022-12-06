@@ -27,3 +27,5 @@ Then open the project on Visual Studio Code--make sure [live server](https://mar
 ![running app](/images/running%20app.png)
 
 It should open the app on the browser automatically.
+
+> If you want to use a bundler, please check the [dev](https://github.com/rismawtsa/js-typing/tree/dev) branch
