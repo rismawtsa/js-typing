@@ -1,0 +1,21 @@
+{
+  "name": "js-typing",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Just Typing is not a game, just a simple app to make typing more comfortable regardless of any score. It is built using vanilla Javascript and the [Quotable](https://github.com/lukePeavey/quotable) API to generate random quotes.",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rismawtsa/js-typing.git"
+  },
+  "homepage": "https://rismawtsa.github.io/js-typing/",
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "vite": "^3.2.5"
+  }
+}

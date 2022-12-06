@@ -6,13 +6,15 @@
   --text-correct: #0c7c59;
   --text-incorrect: #d64933;
   --icon-filter: invert(0.1);
+  --navbar-border-color: #e6e8e8;
 }
 
 .dark-mode {
-  --background-color: #323437;
+  --background-color: #1b1f23;
   --text-primary: #94938f;
   --text-correct: #dddddb;
   --icon-filter: invert(0.5);
+  --navbar-border-color: #424444;
 }
 
 *,
@@ -25,23 +27,26 @@
 }
 
 body {
-  width: 75%;
-  margin-right: auto;
-  margin-left: auto;
+  width: 100%;
   background-color: var(--background-color);
   color: var(--text-primary);
-}
-
-.nav {
-  margin-top: 3rem;
   display: flex;
-  justify-content: flex-end;
-  position: relative;
 }
 
-.nav a {
+.navbar {
+  display: flex;
+  position: relative;
+  width: 5%;
+  flex-direction: column;
+  padding-top: 2rem;
+  height: 100vh;
+  align-items: center;
+  border-left: 1px solid var(--navbar-border-color);
+}
+
+.navbar a {
   text-decoration: none;
-  width: 1.5rem;
+  width: 2.2rem;
   display: block;
 }
 
@@ -50,9 +55,9 @@ body {
   background-color: var(--background-color);
   position: absolute;
   border: 1px solid var(--text-primary);
-  top: 2.2rem;
+  top: 1rem;
   width: 12rem;
-  right: -3.8rem;
+  right: 4.2rem;
   padding: 1rem;
   border-radius: 5px;
   animation: fade-in 0.6s;
@@ -64,11 +69,10 @@ body {
 .setting::before {
   content: "";
   position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -0.8rem;
+  bottom: 60%;
+  left: 100%;
   border: 10px solid transparent;
-  border-bottom: 10px solid var(--text-primary);
+  border-left: 10px solid var(--text-primary);
 }
 
 .setting-item {
@@ -87,10 +91,11 @@ body {
 }
 
 .container {
-  margin-top: 3.5rem;
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 95%;
+  padding: 5rem 6rem 0;
 }
 
 .quote-display {
@@ -140,7 +145,7 @@ body {
 
 .info {
   position: absolute;
-  top: 25%;
+  top: 7rem;
   left: 0;
   right: 0;
   text-align: center;
@@ -167,7 +172,8 @@ body {
   margin-right: 1rem;
 }
 .btn-setting {
-  margin-right: 0.1rem;
+  margin-bottom: 0.5rem;
+  width: 2.2rem;
 }
 
 .btn-next {

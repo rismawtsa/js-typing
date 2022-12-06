@@ -1,6 +1,6 @@
 # Js (Just) Typing
 
-Just Typing is not a game, just a simple app to make typing practice more comfortable regardless of any score. It is built using vanilla Javascript and the [Quotable](https://github.com/lukePeavey/quotable) API to generate random quotes.
+Just Typing is not a game, just a simple app to make typing more comfortable regardless of any score. It is built using vanilla Javascript and the [Quotable](https://github.com/lukePeavey/quotable) API to generate random quotes.
 
 ## Features
 
@@ -10,21 +10,34 @@ Just Typing is not a game, just a simple app to make typing practice more comfor
 4. Copy the quote
 5. Reload
 
-## Getting Started
+Here is the [live demo](https://rismawtsa.github.io/js-typing/)
 
-1. Clone the repository
+## Running Locally
 
-   Open the terminal, change the directory/folder to where you want to put it (eg. `cd ~/Documents/Projects/`) then run the following command
+First, we must have the source code in our machine, to get it, open your favorite terminal and navigate to your preferred directory (eg. `cd desktop`) then run the following command
 
-   ```
-   git clone https://github.com/rismawtsa/js-typing.git
-   ```
+```
+git clone https://github.com/rismawtsa/js-typing.git
+```
 
-   or click the `code` button on the top right side of this repository to see the other options.
+or click the `code` button on the top right side of this repository to see the other options.
 
-2. Running the app
-   Open the project on Visual Studio Code--make sure [live server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension is installed. Right click the index.html file, and choose `Open with live server`.
+Then change the directory to `js-typing` and run the following command
 
-   ![running app](/images/running%20app.png)
+```
+npm install
 
-   It should open the app on the browser automatically.
+npm start
+```
+
+You should see the output that looks very similar to this:
+
+![](/images/running%20app%20on%20terminal.png)
+
+### Other commands
+
+```
+npm run build # build for production
+npm run preview # locally preview production build
+npm run deploy # deploy to github pages
+```

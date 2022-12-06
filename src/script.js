@@ -158,6 +158,12 @@ quoteInputElement.addEventListener("blur", function (event) {
 });
 
 quoteInputElement.addEventListener("input", (event) => {
+  const getNextQuote = () => {
+    currentQuote = "";
+    generateQuote();
+    enableInput();
+  };
+
   const arrayQuote = document.querySelectorAll(".char");
   const arrayValue = event.target.value;
 
@@ -190,11 +196,6 @@ quoteInputElement.addEventListener("input", (event) => {
     arrayQuote[arrayValue.length].classList.add("current");
   }
 
-  function getNextQuote() {
-    currentQuote = "";
-    generateQuote();
-  }
-
   if (correct) {
     if (autonextSwitchElement.checked) {
       getNextQuote();
@@ -202,22 +203,12 @@ quoteInputElement.addEventListener("input", (event) => {
       const arrowIcon = document.createElement("button");
       arrowIcon.classList.add("btn", "btn-next");
       arrowIcon.innerHTML =
-        '<img class="icon" src="./images/right-arrow.svg" alt="next" title="next or press enter/return"/>';
+        '<img class="icon" src="/icons/right-arrow.svg" alt="next" title="next quote"/>';
       arrowIcon.title = "next quote";
-      arrowIcon.addEventListener("click", () => {
-        getNextQuote();
-        enableInput();
-      });
+      arrowIcon.addEventListener("click", getNextQuote);
       quoteDisplayElement.appendChild(arrowIcon);
     }
   }
-
-  quoteInputElement.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && correct) {
-      getNextQuote();
-      enableInput();
-    }
-  });
 });
 
 copyButtonElement.addEventListener("click", () => {
